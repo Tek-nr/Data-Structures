@@ -100,6 +100,37 @@ void append(struct Node** head_ref, int new_data) {
 	return;
 }
 
+void deleteNode(struct Node** head_ref, int node_data) {
+	struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+	struct Node* prev = (struct Node*)malloc(sizeof(struct Node));
+	temp = (*head_ref);
+	prev = (*head_ref);
+
+	//return if head is NULL
+	if ((*head_ref) == NULL)
+		return;
+
+	//if the given node is the head
+	else if ((*head_ref)->data == node_data) {
+		*head_ref= temp->next; //changed head
+		free(temp);
+		return;
+	}
+
+	while (temp->next != NULL && temp->data != node_data) {
+		prev = temp;
+		temp = temp->next;
+	}
+
+	if(temp==NULL || temp->data != node_data) {
+		printf("\nThe given node is not in the list!");
+		return;
+	}
+
+	prev->next = temp->next;
+	free(temp);
+
+}
 
 int main() {
 	struct Node* head = NULL;
