@@ -162,7 +162,7 @@ void deleteNode(struct Node** head_ref, int node_data) {
 	}
 
 	if(temp==NULL || temp->data != node_data) {
-		printf("\nThe given node is not in the list!\n");
+		printf("\nThe given node doesn't exist!\n");
 		return;
 	}
 
@@ -171,15 +171,42 @@ void deleteNode(struct Node** head_ref, int node_data) {
 	lengthOfList--;
 }
 
-//Deleting a node at nth position
+//deleting a node at nth position
+void deleteNth(struct Node** head_ref, int n) {
+	struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+	struct Node* current = (struct Node*)malloc(sizeof(struct Node));
+	temp = *head_ref;
+	current = temp;
+	int i = 0;
 
+	if ((*head_ref) == NULL)
+		return;
 
+	else if (n<0 || n>lengthOfList - 1) {
+		printf("\nInvalid index! (%d)\n", n);
+		return;
+	}
 
+	else if (n == 0) {
+		*head_ref = temp->next; //changed head
+		printf("\n%d. index has been deleted! (%d)\n", n, current->data);
+		free(temp);
+		lengthOfList--;
+		return;
+	}
 
+	while (i+1 != n) {
+		temp = temp->next;
+		i++;
+	}
 
-
-
-
+	current = temp->next;
+	temp->next = current->next;
+	printf("\n%d. index has been deleted! (%d)\n", n, current->data);
+	free(current);
+	lengthOfList--;
+	return;
+}
 
 
 //Deleting all linked list
@@ -258,7 +285,15 @@ int main() {
 	insertNth(&head, 2, 1101);
 	insertNth(&head, 1, 1111);
 	insertNth(&head, 0, 44);
-	insertNth(&head, lengthOfList, 55);
+	printList(head);
+
+	deleteNth(&head, 0);
+	printList(head);	
+	deleteNth(&head, lengthOfList-1);
+	printList(head);	
+	deleteNth(&head, 1);
+	printList(head);	
+	deleteNth(&head, 10);
 	printList(head);
 
 	deleteLinkedList(&head);
