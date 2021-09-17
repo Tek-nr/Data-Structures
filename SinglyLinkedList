@@ -1,4 +1,5 @@
 #include <stdio.h>
+int lengthOfList = 0;
 
 struct Node {
 	int data;
@@ -6,35 +7,36 @@ struct Node {
 };
 
 void printList(struct Node* node) {
+	printf("\nCurrent Linked list is: ");
 	while (node != NULL) {
 		printf(" %d ", node->data);
 		node = node->next;
 	}
+	printf("\nThe length of the list: %d\n", lengthOfList);
 	return;
 }
 
-//INSERTING A NODE
+//Reversed list
 
+
+
+
+
+
+
+
+
+
+//INSERTING A NODE
 //inserting a node at the front
 void push(struct Node** head_ref, int new_data) {
 	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
 	newNode->data = new_data;
 	newNode->next = (*head_ref);
 	(*head_ref) = newNode;
+	lengthOfList++;
+	return;
 }
-
-//inserting a node after a given node
-/*void insertAfter(struct Node* prev_node, int new_data) {
-	if (prev_node == NULL) {
-		printf("The previous node cannot be NULL!");
-		return;
-	}
-
-	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-	newNode->data = new_data;
-	newNode->next = prev_node->next;
-	prev_node->next = newNode;
-}*/
 
 //inserting a node after a given node
 void insertAfter(struct Node** head_ref, int prevData, int new_data) {
@@ -48,14 +50,15 @@ void insertAfter(struct Node** head_ref, int prevData, int new_data) {
 		return;
 	}
 
-	//Don't add the new node if the given prev_data isn't in the list
+	
 	while (temp->data != prevData) {
-		if (temp->next == NULL)
+		if (temp->next == NULL) //Don't add the new node if the given prev_data isn't in the list
 			return;
 		temp = temp->next;
 	}
 		newNode->next = temp->next;
 		temp->next = newNode;
+		lengthOfList++;
 }
 
 void insertBefore(struct Node** head_ref, int nextData, int newData) {
@@ -78,6 +81,7 @@ void insertBefore(struct Node** head_ref, int nextData, int newData) {
 
 	newNode->next = temp->next;
 	temp->next = newNode;
+	lengthOfList++;
 }
 
 //inserting a node at the end
@@ -89,7 +93,7 @@ void append(struct Node** head_ref, int new_data) {
 	newNode->next = NULL;
 
 	if (*head_ref == NULL) {
-		*head_ref = newNode;
+		push(head_ref, new_data);
 		return;
 	}
 
@@ -97,9 +101,43 @@ void append(struct Node** head_ref, int new_data) {
 		last = last->next;
 
 	last->next = newNode;
+	lengthOfList++;
 	return;
 }
 
+//inserting a node at nth position
+void insertNth(struct Node** head_ref, int n, int n_data) {
+	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+	newNode->data = n_data;
+	struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+	temp = *head_ref;
+	int i = 1;
+
+	if (n == 0) { //add the node as head if the list is empty
+		push(head_ref, n_data);
+		return;
+	}
+
+	else if (n == lengthOfList) { //add the node at the front if the n is equal the last index
+		append(head_ref, n_data);
+		return;
+	}
+
+	else if (n < 0 || n > lengthOfList - 1) { //return the function if the n is an invalid value
+		printf("\nInvalid index! (%d)\n",n);
+		return;
+	}
+
+	while (i != n) {
+		temp = temp->next;
+		i++;
+	}
+	newNode->next = temp->next;
+	temp->next = newNode;
+	lengthOfList++;
+}
+
+//DELETING A NODE
 void deleteNode(struct Node** head_ref, int node_data) {
 	struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
 	struct Node* prev = (struct Node*)malloc(sizeof(struct Node));
@@ -114,6 +152,7 @@ void deleteNode(struct Node** head_ref, int node_data) {
 	else if ((*head_ref)->data == node_data) {
 		*head_ref= temp->next; //changed head
 		free(temp);
+		lengthOfList--;
 		return;
 	}
 
@@ -123,22 +162,63 @@ void deleteNode(struct Node** head_ref, int node_data) {
 	}
 
 	if(temp==NULL || temp->data != node_data) {
-		printf("\nThe given node is not in the list!");
+		printf("\nThe given node is not in the list!\n");
 		return;
 	}
 
 	prev->next = temp->next;
 	free(temp);
-
+	lengthOfList--;
 }
+
+//Deleting a node at nth position
+
+
+
+
+
+
+
+
+
+
+//Deleting all linked list
+void deleteLinkedList(struct Node** head_ref) {
+	struct Node* current = (struct Node*)malloc(sizeof(struct Node));
+	struct Node* next = (struct Node*)malloc(sizeof(struct Node));
+	current = (*head_ref);
+
+	if (current == NULL)
+		return;
+
+	while (current != NULL) {
+		next = current->next;
+		free(current);
+		current = next;
+		lengthOfList--;
+	}
+	*head_ref = NULL;
+	printf("\nLinked list has been deleted!\n");
+}
+
+//MOVING A NODE
+
+
+
+
+
+
+
+
 
 int main() {
 	struct Node* head = NULL;
 
+	deleteLinkedList(&head);
+	push(&head, 88);
 	append(&head, 6);
 	append(&head, 5);
 	push(&head, 7);
-	printf("\nCreated Linked list is: ");
 	printList(head);
 
 
@@ -147,7 +227,6 @@ int main() {
 	deleteNode(&head, 7);
 	deleteNode(&head, 5);
 	deleteNode(&head, 6);
-	printf("\nCreated Linked list is: ");
 	printList(head);
 
 	push(&head, 10);
@@ -160,6 +239,28 @@ int main() {
 	push(&head, 66);
 	insertBefore(&head, 10, 5);
 	insertBefore(&head, 6, 4);
-	printf("\nCreated Linked list is: ");
+	printList(head);
+
+	insertNth(&head, 0, 5);
+	printList(head);	
+	insertNth(&head, lengthOfList, 10);
+	insertNth(&head, lengthOfList, 100);
+	insertNth(&head, 0, 100);
+	insertNth(&head, 1000, 10000000);
+	printList(head);
+
+	deleteLinkedList(&head);
+	insertNth(&head, 55, 100);
+	insertNth(&head, lengthOfList, 100);
+	insertNth(&head, 1, 1001);
+	printList(head);
+	
+	insertNth(&head, 2, 1101);
+	insertNth(&head, 1, 1111);
+	insertNth(&head, 0, 44);
+	insertNth(&head, lengthOfList, 55);
+	printList(head);
+
+	deleteLinkedList(&head);
 	printList(head);
 }
