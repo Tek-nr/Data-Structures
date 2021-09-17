@@ -138,17 +138,28 @@ int main() {
 	append(&head, 6);
 	append(&head, 5);
 	push(&head, 7);
+	printf("\nCreated Linked list is: ");
+	printList(head);
+
+
+	deleteNode(&head, 10);
+	deleteNode(&head, 9);
+	deleteNode(&head, 7);
+	deleteNode(&head, 5);
+	deleteNode(&head, 6);
+	printf("\nCreated Linked list is: ");
+	printList(head);
+
 	push(&head, 10);
 	push(&head, 9);
 	push(&head, 8);
-	insertAfter(&head, 8,17);
-	insertAfter(&head, 10,55);
-	insertAfter(&head, 5,15);
-	insertAfter(&head, 15,20);
-	push(&head, 6);
-	insertBefore(&head, 6, 5);
-	insertBefore(&head, 5, 7);
-
+	insertAfter(&head, 8, 17);
+	insertAfter(&head, 10, 55);
+	insertAfter(&head, 5, 15);
+	insertAfter(&head, 15, 20);
+	push(&head, 66);
+	insertBefore(&head, 10, 5);
+	insertBefore(&head, 6, 4);
 	printf("\nCreated Linked list is: ");
 	printList(head);
 }
