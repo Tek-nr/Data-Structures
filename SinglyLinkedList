@@ -17,15 +17,24 @@ void printList(struct Node* node) {
 }
 
 //Reversed list
+void reversed(struct Node** head_ref) {								
+	struct Node* current = (struct Node*)malloc(sizeof(struct Node));
+	struct Node* prev = NULL;  //function cannot run if the NULL value isn't define
+	struct Node* next = NULL;  //cause there is no NULL after the last node
+	current = *head_ref;	  
+	if (*head_ref == NULL)
+		return;
 
+	while (current != NULL) {
+		next = current->next;
+		current->next = prev;
+		prev = current;
+		current = next;
+	}
 
-
-
-
-
-
-
-
+	*head_ref = prev;
+	return;
+}
 
 //INSERTING A NODE
 //inserting a node at the front
@@ -189,7 +198,7 @@ void deleteNth(struct Node** head_ref, int n) {
 
 	else if (n == 0) {
 		*head_ref = temp->next; //changed head
-		printf("\n%d. index has been deleted! (%d)\n", n, current->data);
+		printf("\n%d. index (%d) has been deleted!\n", n, current->data);
 		free(temp);
 		lengthOfList--;
 		return;
@@ -202,7 +211,7 @@ void deleteNth(struct Node** head_ref, int n) {
 
 	current = temp->next;
 	temp->next = current->next;
-	printf("\n%d. index has been deleted! (%d)\n", n, current->data);
+	printf("\n%d. index (%d) has been deleted! \n", n, current->data);
 	free(current);
 	lengthOfList--;
 	return;
@@ -294,8 +303,15 @@ int main() {
 	deleteNth(&head, 1);
 	printList(head);	
 	deleteNth(&head, 10);
+	push(&head, 9);
+	push(&head, 10);
+	push(&head, 11);
 	printList(head);
 
-	deleteLinkedList(&head);
+	/*deleteLinkedList(&head);
+	printList(head);*/
+
+	reversed(&head);
 	printList(head);
+
 }
